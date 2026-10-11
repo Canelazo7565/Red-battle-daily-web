@@ -18,7 +18,7 @@ reimplemented in JavaScript.
 - [RED's team](#reds-team)
 - [Development workflow](#development-workflow)
 - [Testing and debugging](#testing-and-debugging)
-- [Deployment](#deployment)
+- [Running it locally](#running-it-locally)
 - [Copyright and licenses](#copyright-and-licenses)
 - [Known limitations](#known-limitations)
 
@@ -61,8 +61,8 @@ built-in BIOS replacement, so no BIOS file is needed either.
 
 **Why Nostalgist + RetroArch's mGBA core:** it accepts the ROM as raw bytes
 (needed for the config below), exposes button presses and the emulator's
-memory to JavaScript, and doesn't need `SharedArrayBuffer`, so any static host
-works without special headers. Everything is self-hosted from `web/vendor/`.
+memory to JavaScript, and doesn't need `SharedArrayBuffer`, so a plain static
+file server works without special headers. Everything loads from `web/vendor/`.
 
 ### The daily game
 
@@ -317,37 +317,22 @@ screen with "Try again".
 **In the browser console:** `dailyRed.emulator` is the running Nostalgist
 instance and `dailyRed.stats` shows your saved stats.
 
-## Deployment
+## Running it locally
 
-The site is static. After the build, `web/` contains everything (about 9 MB):
+Daily Red is meant to be played on your own computer. After the quick start,
+`web/` holds the whole site (about 9 MB), and `node scripts/serve.mjs` serves
+it at http://localhost:8080:
 
 ```
 web/index.html  app.js  daily.js  game-link.js  game-files.js  rom-config.js  style.css  favicon.svg  licenses.txt
 web/vendor/     emulator (3.4 MB) + font
-web/game/       dailyred.gba.gz (5.5 MB)
+web/game/       dailyred.gba.gz (5.5 MB), built on your machine
 ```
 
-Upload that folder to any static host. No server code, database or special
-headers are needed.
-
-**Cloudflare Pages** (project `dailyred`) is the host this was set up for. Its
-free plan doesn't charge for bandwidth on static files, which matters here:
-every new player downloads about 9 MB. Deploy a locally built `web/` with
-Wrangler, which needs Node.js 22+:
-
-```sh
-npx wrangler@4.141.0 login                                  # once
-npx wrangler@4.141.0 pages deploy web --project-name dailyred --branch main
-```
-
-Netlify, Vercel and GitHub Pages also work, but their free plans allow about
-100 GB a month (roughly 11,000 new players). GitHub Pages would also need the
-ROM in a repository, which this project avoids (see below).
-
-The site works from a sub-path (all URLs are relative). The ROM is downloaded
-gzipped and unpacked in the browser, so it stays small whether or not the host
-compresses responses. After rebuilding the ROM, redeploy `web/game/`; returning
-visitors may need a reload if the host caches files aggressively.
+To use another port, pass it: `node scripts/serve.mjs 3000`. Your stats are
+saved in the browser for that address, so keep using the same port to keep
+your streaks. After rebuilding the ROM (`scripts/build-rom.sh`), reload the
+page.
 
 ## Copyright and licenses
 
@@ -361,8 +346,8 @@ website and the tests. It doesn't include pret/pokefirered or a built ROM; the
 scripts fetch the decompilation from pret's repository and build locally.
 
 The emulator core is GPL-3.0 (RetroArch) and MPL-2.0 (mGBA). `web/licenses.txt`
-lists all third-party components with links to their source. The site serves
-it at `/licenses.txt` and links it from the page footer.
+lists all third-party components with links to their source, and the page
+footer links to it.
 
 ## Known limitations
 
