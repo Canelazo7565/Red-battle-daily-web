@@ -1,7 +1,5 @@
 # Daily Red
 
-**Play it at [dailyred.pages.dev](https://dailyred.pages.dev).**
-
 A daily Pokémon battle in the browser, like Wordle: once a day you press
 **Play**, get the day's six random level 100 Pokémon from Generations 1–3
 (everyone gets the same team that day), and climb to RED at the top of the
@@ -332,10 +330,10 @@ web/game/       dailyred.gba.gz (5.5 MB)
 Upload that folder to any static host. No server code, database or special
 headers are needed.
 
-**Live site: Cloudflare Pages** (project `dailyred`). The free plan doesn't
-charge for bandwidth on static files, which matters here: every new player
-downloads about 9 MB. Deploy a locally built `web/` with Wrangler, which needs
-Node.js 22+:
+**Cloudflare Pages** (project `dailyred`) is the host this was set up for. Its
+free plan doesn't charge for bandwidth on static files, which matters here:
+every new player downloads about 9 MB. Deploy a locally built `web/` with
+Wrangler, which needs Node.js 22+:
 
 ```sh
 npx wrangler@4.141.0 login                                  # once
